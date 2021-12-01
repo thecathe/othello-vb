@@ -1,0 +1,373 @@
+﻿Dim multi As Integer = 100
+    Dim grid(7, 7) As String
+    Dim game As Boolean = False
+    Dim sTurn As Boolean = False
+    Dim turn As String = ""
+    Dim ver(7, 7) As List(Of String)
+    Dim flip As Boolean = False
+    Dim p1score As Integer = 0
+    Dim p2score As Integer = 0
+
+    Private Sub Form1_Load(sender As Object, e As EventArgs) Handles Me.Load
+        Debug.WriteLine("-----------------------------------")
+        Me.Size = New Point((8 * multi) + 60, (8 * multi) + 100)
+        Me.Location = New Point((My.Computer.Screen.WorkingArea.Width / 2) - (Me.Width / 2), (My.Computer.Screen.WorkingArea.Height / 2) - (Me.Height / 2))
+        Me.Invalidate()
+
+        gameBoard.Size = New Point(multi * 8, multi * 8)
+        gameBoard.Location = New Point(20, 15)
+        gameBoard.BackColor = Color.Black
+
+        p1Label.Location = New Point(multi * 2, multi * 8.3)
+        p1sLabel.Location = New Point(multi * 3, multi * 8.3)
+        p2Label.Location = New Point(multi * 5.5, multi * 8.3)
+        p2sLabel.Location = New Point(multi * 6.5, multi * 8.3)
+
+        startButton.Location = New Point((multi * 4) - startButton.Size.Width / 4, multi * 8.3)
+
+        init()
+
+    End Sub
+
+    Private Sub gameBoard_MouseDown(sender As Object, e As MouseEventArgs) Handles gameBoard.MouseDown
+        Dim mPoint = New Point(e.X, e.Y)
+        Dim ix, iy As Integer
+        Debug.WriteLine("------new turn-------")
+
+        ix = pointToIndex(mPoint.X)
+        iy = pointToIndex(mPoint.Y)
+
+        Debug.WriteLine(ver(ix, iy).Count & " " & ix & " " & iy)
+
+
+        Dim p As String = ""
+        Dim t As String = ""
+        If turn = "b" And ver(ix, iy).Count > 0 Then
+            flip = True
+            p = "b"
+            t = "w"
+            turn = "w"
+        ElseIf turn = "w" And ver(ix, iy).Count > 0 Then
+            flip = True
+            p = "w"
+            t = "b"
+            turn = "b"
+        End If
+        grid(ix, iy) = p
+        Debug.WriteLine("flip " & flip)
+        Dim r As Boolean
+        For i = 0 To ver(ix, iy).Count - 1
+            Debug.WriteLine(ver(ix, iy).Count & " " & i)
+            Debug.WriteLine("flipping for " & p & " @ " & ver(ix, iy)(i))
+            r = recursiveFind(reverseDirection(ver(ix, iy)(i)), t, p, ix, iy)
+        Next
+
+        flip = False
+        gameBoard.Invalidate()
+
+    End Sub
+
+    Private Sub GameBoard_Paint(sender As Object, e As PaintEventArgs) Handles gameBoard.Paint
+        Dim g As Graphics = e.Graphics
+        'draws board
+        e.Graphics.Clear(Color.Gray)
+        Dim bBrush As SolidBrush = Brushes.DarkOliveGreen
+        For ix = 0 To 7
+            For iy = 0 To 7
+                g.FillRectangle(bBrush, New Rectangle(New Point(multi * ix, multi * iy), New Size(multi, multi)))
+                If bBrush.Color = Color.DarkOliveGreen Then
+                    bBrush = Brushes.ForestGreen
+                Else
+                    bBrush = Brushes.DarkOliveGreen
+                End If
+            Next
+            If bBrush.Color = Color.DarkOliveGreen Then
+                bBrush = Brushes.ForestGreen
+            Else
+                bBrush = Brushes.DarkOliveGreen
+            End If
+        Next
+        Debug.WriteLine("board drawn")
+
+
+        p1score = 0
+        p2score = 0
+        'loads states
+        Dim cBrush As SolidBrush = Brushes.GhostWhite
+        For ix = 0 To 7
+            For iy = 0 To 7
+                Select Case grid(ix, iy)
+                    Case "b"
+                        cBrush = Brushes.Black
+                        g.FillEllipse(cBrush, New Rectangle(New Point((multi * ix) + multi * 0.125, (multi * iy) + multi * 0.125), New Size(multi * 0.75, multi * 0.75)))
+                        p1score += 1
+                    Case "w"
+                        cBrush = Brushes.GhostWhite
+                        g.FillEllipse(cBrush, New Rectangle(New Point((multi * ix) + multi * 0.125, (multi * iy) + multi * 0.125), New Size(multi * 0.75, multi * 0.75)))
+                        p2score += 1
+                End Select
+                ver(ix, iy).Clear()
+            Next
+        Next
+
+        p1sLabel.Text = p1score
+        p2sLabel.Text = p2score
+
+        For ix = 0 To 7
+            For iy = 0 To 7
+                Debug.Write(grid(ix, iy) + " ")
+            Next
+            Debug.Write(vbNewLine)
+        Next
+
+
+        'finds possible moves
+        Debug.WriteLine(turn & " turn")
+        If game Then
+            Dim p As String = ""
+            Dim t As String = ""
+            Dim hBrush As SolidBrush = Brushes.LightSkyBlue
+            Debug.WriteLine("-------------------")
+            If turn = "b" Then
+                p = "b"
+                t = "w"
+            Else
+                p = "w"
+                t = "b"
+            End If
+            For ix = 0 To 7
+                For iy = 0 To 7
+                    'when piece is found, checks all neighboring peices
+                    If grid(ix, iy) = p Then
+                        If grid(ix, iy - 1) = t Then                                  'n
+                            Debug.WriteLine("facing n")
+                            Debug.WriteLine("mylocation:" & ix & "," & iy)
+                            Dim r As Point = recursiveFind("n", p, t, ix, iy)
+                            Debug.WriteLine("found:" + r.ToString)
+                            If r.X > -1 Then
+                                g.FillEllipse(hBrush, New Rectangle(New Point((multi * 0.4) + r.X * 100, (multi * 0.4) + r.Y * 100), New Size(20, 20)))
+                                ver(r.X, r.Y).Add("n")
+                                Debug.WriteLine(r.X & " " & r.Y & " ver Count " & ver(r.X, r.Y).Count)
+                                Debug.WriteLine(pointToIndex(r.X) & " " & pointToIndex(r.Y))
+                            End If
+                        End If
+                        If grid(ix - 1, iy - 1) = t Then                              'nw
+                            Debug.WriteLine("facing nw")
+                            Debug.WriteLine("mylocation:" & ix & "," & iy)
+                            Dim r As Point = recursiveFind("nw", p, t, ix, iy)
+                            Debug.WriteLine("found:" + r.ToString)
+                            If r.X > -1 Then
+                                g.FillEllipse(hBrush, New Rectangle(New Point((multi * 0.4) + r.X * 100, (multi * 0.4) + r.Y * 100), New Size(20, 20)))
+                                ver(r.X, r.Y).Add("nw")
+                                Debug.WriteLine(r.X & " " & r.Y & " ver Count " & ver(r.X, r.Y).Count)
+                                Debug.WriteLine(pointToIndex(r.X) & " " & pointToIndex(r.Y))
+                            End If
+                        End If
+                        If grid(ix - 1, iy) = t Then                                  'w
+                            Debug.WriteLine("facing w")
+                            Debug.WriteLine("mylocation:" & ix & "," & iy)
+                            Dim r As Point = recursiveFind("w", p, t, ix, iy)
+                            Debug.WriteLine("found:" + r.ToString)
+                            If r.X > -1 Then
+                                g.FillEllipse(hBrush, New Rectangle(New Point((multi * 0.4) + r.X * 100, (multi * 0.4) + r.Y * 100), New Size(20, 20)))
+                                ver(r.X, r.Y).Add("w")
+                                Debug.WriteLine(r.X & " " & r.Y & " ver Count " & ver(r.X, r.Y).Count)
+                                Debug.WriteLine(pointToIndex(r.X) & " " & pointToIndex(r.Y))
+                            End If
+                        End If
+                        If grid(ix - 1, iy + 1) = t Then                              'sw
+                            Debug.WriteLine("facing sw")
+                            Debug.WriteLine("mylocation:" & ix & "," & iy)
+                            Dim r As Point = recursiveFind("sw", p, t, ix, iy)
+                            Debug.WriteLine("found:" + r.ToString)
+                            If r.X > -1 Then
+                                g.FillEllipse(hBrush, New Rectangle(New Point((multi * 0.4) + r.X * 100, (multi * 0.4) + r.Y * 100), New Size(20, 20)))
+                                ver(r.X, r.Y).Add("sw")
+                                Debug.WriteLine(r.X & " " & r.Y & " ver Count " & ver(r.X, r.Y).Count)
+                                Debug.WriteLine(pointToIndex(r.X) & " " & pointToIndex(r.Y))
+                            End If
+                        End If
+                        If grid(ix, iy + 1) = t Then                                  's
+                            Debug.WriteLine("facing s")
+                            Debug.WriteLine("mylocation:" & ix & "," & iy)
+                            Dim r As Point = recursiveFind("s", p, t, ix, iy)
+                            Debug.WriteLine("found:" + r.ToString)
+                            If r.X > -1 Then
+                                g.FillEllipse(hBrush, New Rectangle(New Point((multi * 0.4) + r.X * 100, (multi * 0.4) + r.Y * 100), New Size(20, 20)))
+                                ver(r.X, r.Y).Add("s")
+                                Debug.WriteLine(r.X & " " & r.Y & " ver Count " & ver(r.X, r.Y).Count)
+                                Debug.WriteLine(pointToIndex(r.X) & " " & pointToIndex(r.Y))
+                            End If
+                        End If
+                        If grid(ix + 1, iy + 1) = t Then                              'se
+                            Debug.WriteLine("facing se")
+                            Debug.WriteLine("mylocation:" & ix & "," & iy)
+                            Dim r As Point = recursiveFind("se", p, t, ix, iy)
+                            Debug.WriteLine("found:" + r.ToString)
+                            If r.X > -1 Then
+                                g.FillEllipse(hBrush, New Rectangle(New Point((multi * 0.4) + r.X * 100, (multi * 0.4) + r.Y * 100), New Size(20, 20)))
+                                ver(r.X, r.Y).Add("se")
+                                Debug.WriteLine(r.X & " " & r.Y & " ver Count " & ver(r.X, r.Y).Count)
+                                Debug.WriteLine(pointToIndex(r.X) & " " & pointToIndex(r.Y))
+                            End If
+                        End If
+                        If grid(ix + 1, iy) = t Then                                  'e
+                            Debug.WriteLine("facing e")
+                            Debug.WriteLine("mylocation:" & ix & "," & iy)
+                            Dim r As Point = recursiveFind("e", p, t, ix, iy)
+                            Debug.WriteLine("found:" + r.ToString)
+                            If r.X > -1 Then
+                                g.FillEllipse(hBrush, New Rectangle(New Point((multi * 0.4) + r.X * 100, (multi * 0.4) + r.Y * 100), New Size(20, 20)))
+                                ver(r.X, r.Y).Add("e")
+                                Debug.WriteLine(r.X & " " & r.Y & " ver Count " & ver(r.X, r.Y).Count)
+                                Debug.WriteLine(pointToIndex(r.X) & " " & pointToIndex(r.Y))
+                            End If
+                        End If
+                        If grid(ix + 1, iy - 1) = t Then                              'ne
+                            Debug.WriteLine("facing ne")
+                            Debug.WriteLine("mylocation:" & ix & "," & iy)
+                            Dim r As Point = recursiveFind("ne", p, t, ix, iy)
+                            Debug.WriteLine("found:" + r.ToString)
+                            If r.X > -1 Then
+                                g.FillEllipse(hBrush, New Rectangle(New Point((multi * 0.4) + r.X * 100, (multi * 0.4) + r.Y * 100), New Size(20, 20)))
+                                ver(r.X, r.Y).Add("ne")
+                                Debug.WriteLine(r.X & " " & r.Y & " ver Count " & ver(r.X, r.Y).Count)
+                                Debug.WriteLine(pointToIndex(r.X) & " " & pointToIndex(r.Y))
+                            End If
+                        End If
+                    End If
+                Next
+            Next
+            Debug.WriteLine("possible moves found")
+        End If
+    End Sub
+
+    Public Function recursiveFind(bearing As String, pColor As String, tColor As String, posX As Integer, posY As Integer)
+        Select Case bearing
+            Case "n"
+                posY -= 1
+            Case "nw"
+                posX -= 1
+                posY -= 1
+            Case "w"
+                posX -= 1
+            Case "sw"
+                posX -= 1
+                posY += 1
+            Case "s"
+                posY += 1
+            Case "se"
+                posX += 1
+                posY += 1
+            Case "e"
+                posX += 1
+            Case "ne"
+                posX += 1
+                posY -= 1
+        End Select
+
+        Debug.WriteLine("looking at:" & posX & "," & posY & " " & grid(posX, posY))
+        If flip Then
+            If grid(posX, posY) = tColor Then
+                Debug.WriteLine("found " & grid(posX, posY) & " @ " & posX & "," & posY)
+                grid(posX, posY) = pColor
+                Debug.WriteLine("flipping " & grid(posX, posY))
+                recursiveFind(bearing, pColor, tColor, posX, posY)
+            Else
+                Return True
+            End If
+        Else
+            Select Case grid(posX, posY)
+                Case pColor 'if it matches, quit
+                    If flip Then
+                        Return New Point(posX, posY)
+                    End If
+                    Debug.WriteLine("failed " & grid(posX, posY) & " @ " & posX & "," & posY)
+                    Return New Point(-1, -1)
+                Case tColor 'if its the target, look again
+                    Debug.WriteLine("found " & grid(posX, posY) & " @ " & posX & "," & posY)
+                    If flip Then
+                        Debug.WriteLine("FLIPING" & grid(posX, posY))
+                        grid(posX, posY) = pColor
+                    End If
+                    Return recursiveFind(bearing, pColor, tColor, posX, posY)
+                Case "o"    'if its empty, take
+                    If flip = False Then
+                        Debug.WriteLine("finished " & grid(posX, posY) & " @ " & posX & "," & posY)
+                        Return New Point(posX, posY)
+                    End If
+            End Select
+        End If
+        Return New Point(-1, -1)
+    End Function
+
+    Public Function pointToIndex(loc As Integer)
+        Dim i As Integer = 0
+        If 0 < (loc / multi) And (loc / multi) < 1 Then
+            i = 0
+        ElseIf 1 < (loc / multi) And (loc / multi) < 2 Then
+            i = 1
+        ElseIf 2 < (loc / multi) And (loc / multi) < 3 Then
+            i = 2
+        ElseIf 3 < (loc / multi) And (loc / multi) < 4 Then
+            i = 3
+        ElseIf 4 < (loc / multi) And (loc / multi) < 5 Then
+            i = 4
+        ElseIf 5 < (loc / multi) And (loc / multi) < 6 Then
+            i = 5
+        ElseIf 6 < (loc / multi) And (loc / multi) < 7 Then
+            i = 6
+        ElseIf 7 < (loc / multi) And (loc / multi) < 8 Then
+            i = 7
+        End If
+        Return (i)
+    End Function
+
+    Public Function reverseDirection(direction As String)
+        Select Case direction
+            Case "n"
+                direction = "s"
+            Case "ne"
+                direction = "sw"
+            Case "e"
+                direction = "w"
+            Case "se"
+                direction = "nw"
+            Case "s"
+                direction = "n"
+            Case "sw"
+                direction = "ne"
+            Case "w"
+                direction = "e"
+            Case "nw"
+                direction = "se"
+        End Select
+        Return direction
+    End Function
+
+    Private Sub startButton_Click(sender As Object, e As EventArgs) Handles startButton.Click
+        init()
+    End Sub
+
+    Public Sub init()
+        Debug.WriteLine("grid initialised")
+
+        'generates starting board
+        For ix = 0 To 7
+            For iy = 0 To 7
+                If (ix = 3 And iy = 3) Or (ix = 4 And iy = 4) Then
+                    grid(ix, iy) = "b"
+                ElseIf (ix = 3 And iy = 4) Or (ix = 4 And iy = 3) Then
+                    grid(ix, iy) = "w"
+                Else
+                    grid(ix, iy) = "o"
+                End If
+                ver(ix, iy) = New List(Of String)
+            Next
+        Next
+
+        game = True
+        turn = "b"
+
+        gameBoard.Invalidate()
+    End Sub

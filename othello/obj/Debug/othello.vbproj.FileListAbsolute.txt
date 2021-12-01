@@ -1,0 +1,48 @@
+C:\Users\pears\AppData\Local\Temporary Projects\othello\bin\Debug\othello.exe.config
+C:\Users\pears\AppData\Local\Temporary Projects\othello\bin\Debug\othello.exe
+C:\Users\pears\AppData\Local\Temporary Projects\othello\bin\Debug\othello.pdb
+C:\Users\pears\AppData\Local\Temporary Projects\othello\bin\Debug\othello.xml
+C:\Users\pears\AppData\Local\Temporary Projects\othello\obj\Debug\othello.vbprojResolveAssemblyReference.cache
+C:\Users\pears\AppData\Local\Temporary Projects\othello\obj\Debug\othello.Form1.resources
+C:\Users\pears\AppData\Local\Temporary Projects\othello\obj\Debug\othello.Resources.resources
+C:\Users\pears\AppData\Local\Temporary Projects\othello\obj\Debug\othello.vbproj.GenerateResource.Cache
+C:\Users\pears\AppData\Local\Temporary Projects\othello\obj\Debug\othello.vbproj.CoreCompileInputs.cache
+C:\Users\pears\AppData\Local\Temporary Projects\othello\obj\Debug\othello.exe
+C:\Users\pears\AppData\Local\Temporary Projects\othello\obj\Debug\othello.xml
+C:\Users\pears\AppData\Local\Temporary Projects\othello\obj\Debug\othello.pdb
+A:\pears\OneDrive\Programming Projects\VB\othello\othello\bin\Debug\othello.exe.config
+A:\pears\OneDrive\Programming Projects\VB\othello\othello\bin\Debug\othello.exe
+A:\pears\OneDrive\Programming Projects\VB\othello\othello\bin\Debug\othello.pdb
+A:\pears\OneDrive\Programming Projects\VB\othello\othello\bin\Debug\othello.xml
+A:\pears\OneDrive\Programming Projects\VB\othello\othello\obj\Debug\othello.vbprojResolveAssemblyReference.cache
+A:\pears\OneDrive\Programming Projects\VB\othello\othello\obj\Debug\othello.Form1.resources
+A:\pears\OneDrive\Programming Projects\VB\othello\othello\obj\Debug\othello.Resources.resources
+A:\pears\OneDrive\Programming Projects\VB\othello\othello\obj\Debug\othello.vbproj.GenerateResource.Cache
+A:\pears\OneDrive\Programming Projects\VB\othello\othello\obj\Debug\othello.vbproj.CoreCompileInputs.cache
+A:\pears\OneDrive\Programming Projects\VB\othello\othello\obj\Debug\othello.exe
+A:\pears\OneDrive\Programming Projects\VB\othello\othello\obj\Debug\othello.xml
+A:\pears\OneDrive\Programming Projects\VB\othello\othello\obj\Debug\othello.pdb
+D:\OneDrive\Programming Projects\VB\othello\othello\bin\Debug\othello.exe.config
+D:\OneDrive\Programming Projects\VB\othello\othello\bin\Debug\othello.exe
+D:\OneDrive\Programming Projects\VB\othello\othello\bin\Debug\othello.pdb
+D:\OneDrive\Programming Projects\VB\othello\othello\bin\Debug\othello.xml
+D:\OneDrive\Programming Projects\VB\othello\othello\obj\Debug\othello.vbprojResolveAssemblyReference.cache
+D:\OneDrive\Programming Projects\VB\othello\othello\obj\Debug\othello.Form1.resources
+D:\OneDrive\Programming Projects\VB\othello\othello\obj\Debug\othello.Resources.resources
+D:\OneDrive\Programming Projects\VB\othello\othello\obj\Debug\othello.vbproj.GenerateResource.Cache
+D:\OneDrive\Programming Projects\VB\othello\othello\obj\Debug\othello.vbproj.CoreCompileInputs.cache
+D:\OneDrive\Programming Projects\VB\othello\othello\obj\Debug\othello.exe
+D:\OneDrive\Programming Projects\VB\othello\othello\obj\Debug\othello.xml
+D:\OneDrive\Programming Projects\VB\othello\othello\obj\Debug\othello.pdb
+A:\pears\Google Drive\Programming Projects\VB\othello\othello\bin\Debug\othello.exe.config
+A:\pears\Google Drive\Programming Projects\VB\othello\othello\bin\Debug\othello.exe
+A:\pears\Google Drive\Programming Projects\VB\othello\othello\bin\Debug\othello.pdb
+A:\pears\Google Drive\Programming Projects\VB\othello\othello\bin\Debug\othello.xml
+A:\pears\Google Drive\Programming Projects\VB\othello\othello\obj\Debug\othello.vbprojResolveAssemblyReference.cache
+A:\pears\Google Drive\Programming Projects\VB\othello\othello\obj\Debug\othello.Form1.resources
+A:\pears\Google Drive\Programming Projects\VB\othello\othello\obj\Debug\othello.Resources.resources
+A:\pears\Google Drive\Programming Projects\VB\othello\othello\obj\Debug\othello.vbproj.GenerateResource.Cache
+A:\pears\Google Drive\Programming Projects\VB\othello\othello\obj\Debug\othello.vbproj.CoreCompileInputs.cache
+A:\pears\Google Drive\Programming Projects\VB\othello\othello\obj\Debug\othello.exe
+A:\pears\Google Drive\Programming Projects\VB\othello\othello\obj\Debug\othello.xml
+A:\pears\Google Drive\Programming Projects\VB\othello\othello\obj\Debug\othello.pdb
